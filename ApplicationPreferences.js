@@ -90,3 +90,33 @@ export function ArticlePreview() {
         </div>
     );
 }
+
+
+export function Dashboard() {
+    const { theme } = usePreferences();
+
+    return (
+        <div style={{
+            maxWidth: '450px',
+            margin: '20px auto',
+            padding: '20px',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            fontFamily: 'Arial, sans-serif',
+            backgroundColor: theme === 'light' ? '#fafafa' : '#222222',
+            color: theme === 'light' ? '#000000' : '#ffffff'
+        }}>
+            <h2 style={{ marginTop: 0 }}>Dashboard</h2>
+            <Toolbar />
+            <ArticlePreview />
+        </div>
+    );
+}
+
+export default function ApplicationPreferencesApp() {
+    return (
+        <PreferencesProvider>
+            <Dashboard />
+        </PreferencesProvider>
+    );
+}
