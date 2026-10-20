@@ -112,3 +112,83 @@ export default function IssueTracker() {
         if (state.filter === 'done') return i.done;
         return true;
     });
+    return (
+        <div style={{ maxWidth: '450px', margin: '20px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', fontFamily: 'Arial, sans-serif' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <h2 style={{ margin: 0 }}>Issue Tracker</h2>
+                <button onClick={() => setTestResults(runReducerTests())} style={{ padding: '4px 8px', cursor: 'pointer' }}>
+                    Run Tests
+                </button>
+            </div>
+
+            {testResults && (
+                <div style={{ background: '#f5f5f5', padding: '8px', borderRadius: '4px', marginBottom: '12px', fontSize: '13px' }}>
+                    {testResults.map((t, idx) => (
+                        <div key={idx} style={{ color: t.passed ? 'green' : 'red' }}>
+                            {t.passed ? '✓' : '✗'} {t.name}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <form onSubmit={handleAdd} style={{ display: 'flex', gap: '6px', marginBottom: '12px' }}>
+                <input
+                    type="text"
+                    placeholder="New issue..."
+                    value={titleInput}
+                    onChange={(e) => setTitleInput(e.target.value)}
+                    style={{ flex: 1, padding: '6px' }}
+                />
+                <button type="submit" style={{ padding: '6px 12px', cursor: 'pointer' }}>
+                    Add
+                </button>
+            </form>
+
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '12px' }}>
+                {['all', 'open', 'done'].map(f => (
+                    <button
+                        key={f}
+                        onClick={() => dispatch({ type: 'SET_FILTER', payload: { filter: f } })}
+                        style={{
+                            padding: '4px 8px',
+                            fontWeight: state.filter === f ? 'bold' : 'normal',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {f.toUpperCase()} ({state.issues.filter(i => f === 'all' ? true : f === 'done' ? i.done : !i.done).length})
+                    </button>
+                ))}
+
+                <button
+                    onClick={() => dispatch({ type: 'CLEAR_DONE' })}
+                    style={{ marginLeft: 'auto', padding: '4px 8px', cursor: 'pointer' }}
+                >
+                    Clear Done
+                </button>
+            </div>
+
+            <ul style={{ paddingLeft: '20px', margin: '8px 0' }}>
+                {filteredIssues.map(issue => (
+                    <li key={issue.id} style={{ marginBottom: '6px' }}>
+                        <label style={{ cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={issue.done}
+                                onChange={() => dispatch({ type: 'TOGGLE_ISSUE', payload: { id: issue.id } })}
+                            />
+                            <span style={{ textDecoration: issue.done ? 'line-through' : 'none', marginLeft: '6px' }}>
+                                {issue.title}
+                            </span>
+                        </label>
+                        <button
+                            onClick={() => dispatch({ type: 'DELETE_ISSUE', payload: { id: issue.id } })}
+                            style={{ marginLeft: '8px', padding: '1px 5px', cursor: 'pointer' }}
+                        >
+                            x
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
