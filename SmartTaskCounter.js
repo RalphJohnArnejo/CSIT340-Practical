@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 export default function SmartTaskCounter() {
+    const [count, setCount] = useState(0);
+    const [target, setTarget] = useState(5);
     const status = count === 0
         ? 'Not started'
         : count >= target
