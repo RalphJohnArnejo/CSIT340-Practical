@@ -64,3 +64,49 @@ export default function ProductExplorer() {
     const handleSelectProduct = useCallback((product) => {
         setSelectedProduct(product);
     }, []);
+
+    return (
+        <div style={{ maxWidth: '500px', margin: '20px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', fontFamily: 'Arial, sans-serif' }}>
+            <h2 style={{ marginTop: 0 }}>Product Explorer (500 Records)</h2>
+
+            {/* Unrelated counter in parent to test unnecessary work */}
+            <div style={{ marginBottom: '12px' }}>
+                <span>Parent Counter: {unrelatedCounter} </span>
+                <button onClick={() => setUnrelatedCounter(c => c + 1)} style={{ padding: '2px 6px', cursor: 'pointer' }}>
+                    Increment (Test Child Re-render)
+                </button>
+            </div>
+
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
+                <input
+                    type="text"
+                    placeholder="Search items..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ flex: 1, padding: '6px' }}
+                />
+                <select value={category} onChange={(e) => setCategory(e.target.value)} style={{ padding: '6px' }}>
+                    <option value="All">All Categories</option>
+                    {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} style={{ padding: '6px' }}>
+                    <option value="none">Sort: Default</option>
+                    <option value="asc">Price: Low to High</option>
+                    <option value="desc">Price: High to Low</option>
+                </select>
+            </div>
+
+            {selectedProduct && (
+                <p style={{ margin: '6px 0', fontSize: '14px' }}>
+                    Selected: <strong>{selectedProduct.name}</strong> (${selectedProduct.price})
+                </p>
+            )}
+
+            <ProductList
+                products={filteredProducts}
+                onSelectProduct={handleSelectProduct}
+                selectedId={selectedProduct?.id}
+            />
+        </div>
+    );
+}
