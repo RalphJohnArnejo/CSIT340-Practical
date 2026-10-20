@@ -31,8 +31,8 @@ export default function LiveSearchandTimer() {
 
     useEffect(() => {
         const timerId = setInterval(() => {
-            setSeconds(prev = prev + 1);
-        }, 1000)
+            setSeconds(prev => prev + 1);
+        }, 1000);
         return () => clearInterval(timerId);
     }, []);
 
